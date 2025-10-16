@@ -10,7 +10,7 @@ from pathlib import Path
 import logging
 
 app = FastAPI(
-    title="Proyecto Cloud UAI - API - Rodrigo Andrés Gómez López, Solangel Quintana, Hector Alfaro y Francisco Fernandez",
+    title="Proyecto Cloud UAI - API - Rodrigo Andrés Gómez López, Solangel Quintanilla, Hector Alfaro y Francisco Fernandez",
     version="3.0.2"
 )
 
