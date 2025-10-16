@@ -1,0 +1,43 @@
+{
+  "threshold": 0.5,
+  "roc_auc": 0.8455980861244019,
+  "average_precision": 0.9076426648246901,
+  "classification_report": {
+    "0": {
+      "precision": 0.7411764705882353,
+      "recall": 0.5727272727272728,
+      "f1-score": 0.6461538461538462,
+      "support": 110.0
+    },
+    "1": {
+      "precision": 0.7813953488372093,
+      "recall": 0.8842105263157894,
+      "f1-score": 0.8296296296296296,
+      "support": 190.0
+    },
+    "accuracy": 0.77,
+    "macro avg": {
+      "precision": 0.7612859097127223,
+      "recall": 0.7284688995215312,
+      "f1-score": 0.7378917378917379,
+      "support": 300.0
+    },
+    "weighted avg": {
+      "precision": 0.7666484268125855,
+      "recall": 0.77,
+      "f1-score": 0.7623551756885091,
+      "support": 300.0
+    }
+  },
+  "test_size": 0.2,
+  "paths": {
+    "model": "artifacts/model.joblib",
+    "confusion_matrix": "artifacts/cm.png",
+    "roc": "artifacts/roc.png",
+    "pr": "artifacts/pr.png",
+    "importances": "artifacts/importances.png",
+    "train_clean": "outputs/train_clean.csv",
+    "valid_clean": "outputs/valid_clean.csv",
+    "preds_validacion": "outputs/predicciones_validacion.csv"
+  }
+}
