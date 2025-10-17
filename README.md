@@ -31,7 +31,51 @@ En síntesis, el informe presenta no solo un pipeline robusto y metodológicamen
 
 ---
 
-## Paso a paso probado (comandos reales)
+---
+
+## Estructura de directorios (resumen)
+```
+backend/
+├─ api/
+│  └─ v1/
+│     ├─ routes/
+│     │  └─ modelo.py              # Endpoints FastAPI (help/train/metrics/predict, logs en terminal)
+│     ├─ schemas/
+│     │  └─ io.py                  # Pydantic: TrainRequest / PredictRequest
+│     └─ services/
+│        └─ model_service.py       # Lanza src/train.py con el Python del venv
+│
+├─ src/
+│  ├─ train.py                     # Entrenamiento (mensajes 1/9…9/9, guarda y muestra imágenes)
+│  ├─ predict.py                   # Predicción (interactivo/JSON/CSV; valida reglas y calcula ratio)
+│  └─ main.py                      # Wrapper: usa sys.executable para invocar train/predict
+│
+├─ artifacts/                      # Se crea al entrenar
+│  ├─ model.joblib                 # Pipeline serializado (pre + modelo)
+│  ├─ feature_order.json           # Orden de columnas esperado por el modelo
+│  ├─ metrics.json                 # Métricas, umbral, rutas a imágenes/outputs
+│  ├─ cm.png, roc.png, pr.png      # Matriz de confusión, curva ROC, Precision-Recall
+│  └─ importances.png              # Importancias/coeficientes (si aplica)
+│
+├─ outputs/                        # Se crea al entrenar
+│  ├─ train_clean.csv              # DF de entrenamiento con target
+│  ├─ valid_clean.csv              # DF de validación con target
+│  └─ predicciones_validacion.csv  # Auditoría de validación (y_true, proba, yhat)
+│
+├─ data/
+│  ├─ Tabla_data_set.xlsx          # Dataset base (hoja 0 por defecto)
+│  └─ plantilla_prediccion.csv     # (Opcional) Ejemplo para predicción por CSV
+│
+├─ tools/
+│  ├─ run_train_api.ps1            # Crea/activa venv, instala, entrena y abre Swagger
+│  └─ predict_json.ps1             # Helper PowerShell para pasar JSON a predict.py
+│
+├─ requirements.txt                # Dependencias (Python 3.12 recomendado)
+└─ README.md
+```
+---
+
+## PASO A PASO PROBADO (comandos reales)
 
 > Las líneas que empiezan con `#` son comentarios. Copia/pega los **comandos** tal como están.
 
@@ -144,48 +188,6 @@ uvicorn api.v1.routes.modelo:app --reload
 
 > La API también imprime el resultado en la **terminal** de Uvicorn con un bloque de texto similar al de la consola interactiva (sin crear CSV).
 
----
-
-## Estructura de directorios (resumen)
-```
-backend/
-├─ api/
-│  └─ v1/
-│     ├─ routes/
-│     │  └─ modelo.py              # Endpoints FastAPI (help/train/metrics/predict, logs en terminal)
-│     ├─ schemas/
-│     │  └─ io.py                  # Pydantic: TrainRequest / PredictRequest
-│     └─ services/
-│        └─ model_service.py       # Lanza src/train.py con el Python del venv
-│
-├─ src/
-│  ├─ train.py                     # Entrenamiento (mensajes 1/9…9/9, guarda y muestra imágenes)
-│  ├─ predict.py                   # Predicción (interactivo/JSON/CSV; valida reglas y calcula ratio)
-│  └─ main.py                      # Wrapper: usa sys.executable para invocar train/predict
-│
-├─ artifacts/                      # Se crea al entrenar
-│  ├─ model.joblib                 # Pipeline serializado (pre + modelo)
-│  ├─ feature_order.json           # Orden de columnas esperado por el modelo
-│  ├─ metrics.json                 # Métricas, umbral, rutas a imágenes/outputs
-│  ├─ cm.png, roc.png, pr.png      # Matriz de confusión, curva ROC, Precision-Recall
-│  └─ importances.png              # Importancias/coeficientes (si aplica)
-│
-├─ outputs/                        # Se crea al entrenar
-│  ├─ train_clean.csv              # DF de entrenamiento con target
-│  ├─ valid_clean.csv              # DF de validación con target
-│  └─ predicciones_validacion.csv  # Auditoría de validación (y_true, proba, yhat)
-│
-├─ data/
-│  ├─ Tabla_data_set.xlsx          # Dataset base (hoja 0 por defecto)
-│  └─ plantilla_prediccion.csv     # (Opcional) Ejemplo para predicción por CSV
-│
-├─ tools/
-│  ├─ run_train_api.ps1            # Crea/activa venv, instala, entrena y abre Swagger
-│  └─ predict_json.ps1             # Helper PowerShell para pasar JSON a predict.py
-│
-├─ requirements.txt                # Dependencias (Python 3.12 recomendado)
-└─ README.md
-```
 
 ---
 
