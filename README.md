@@ -1,7 +1,9 @@
-# MODELO CLOUD — Entrenamiento y Predicción (Consola & Swagger)
+# MODELO CLOUD — ENTRENAMIENTO Y PREDICCIÓN
+#           (Consola & Swagger)
+
 # SOLAGEL QUINTANILLA - RODRIGO ANDRES GOMEZ LOPEZ - FRANCISCO FERNANDEZ - HECTOR ALFARO
 
-RESUMEN: 
+# RESUMEN: 
 Desarrollo del proyecto de análisis y modelado de riesgo crediticio aplicado a la predicción de incumplimiento de clientes (default). El trabajo se enmarca en la metodología CRISP-DM, abordando de forma ordenada las fases de comprensión de datos, preparación, modelado, evaluación y deployment.
 
 Proyecto de **CLOUD COMPUTING PARA CIENCIA DE DATOS** para entrenar y desplegar un modelo de clasificación binaria (riesgo de **Default**) con **FastAPI**. Permite:
