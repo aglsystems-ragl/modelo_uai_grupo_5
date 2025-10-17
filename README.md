@@ -1,4 +1,5 @@
 # MODELO CLOUD — Entrenamiento y Predicción (Consola & Swagger)
+# SOLAGEL QUINTANILLA - RODRIGO ANDRES GOMEZ LOPEZ - FRANCISCO FERNANDEZ - HECTOR ALFARO
 
 Proyecto de **CLOUD COMPUTING PARA CIENCIA DE DATOS** para entrenar y desplegar un modelo de clasificación binaria (riesgo de **Default**) con **FastAPI**. Permite:
 - Entrenar desde **consola** y desde **Swagger**.
