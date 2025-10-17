@@ -7,6 +7,11 @@ Proyecto de **CLOUD COMPUTING PARA CIENCIA DE DATOS** para entrenar y desplegar 
 - Ver **gráficas** (ROC, PR, matriz de confusión, coeficientes) y abrir automáticamente la carpeta `artifacts/`.
 - Aplicar **reglas de negocio** y calcular automáticamente `Ratio_Ingresos_Deudas`.
 
+RESUMEN: 
+Desarrollo del proyecto de análisis y modelado de riesgo crediticio aplicado a la predicción de incumplimiento de clientes (default). El trabajo se enmarca en la metodología CRISP-DM, abordando de forma ordenada las fases de comprensión de datos, preparación, modelado, evaluación y deployment.
+
+En síntesis, el informe presenta no solo un pipeline robusto y metodológicamente justificado para modelar riesgo crediticio, sino también la capacidad estratégica de adaptar la solución a distintos objetivos: robustez técnica para un modelo explicable y optimización competitiva para maximizar desempeño según la métrica de evaluación.
+
 > Repositorio pensado para Windows/PowerShell (probado en la práctica). También funciona en macOS/Linux (ajustando activación del venv).
 
 ---
