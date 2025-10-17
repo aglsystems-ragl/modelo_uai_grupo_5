@@ -241,6 +241,6 @@ Si los datos no cumplen, la API devuelve **422** y la consola muestra un mensaje
 ##  Créditos
 Grupo 06 — Trabajo Grupal N°2  
 - Solange Quintanilla (API, despliegue)  
-- Rodrigo Andrés Gómez López (Modelado, EDA)  
+- Rodrigo Andrés Gómez López (Modelado, EDA, API, despliegue)  
 - Héctor Alfaro (Pipeline, testing)  
 - Francisco Fernandez (Documentación, GitHub)
