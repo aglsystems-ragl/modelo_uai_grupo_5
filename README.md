@@ -1,151 +1,231 @@
-# Despliegue de Modelo ML con FastAPI — Trabajo Grupal N°2 (Grupo 06)
+# MODELO CLOUD — Entrenamiento y Predicción (Consola & Swagger)
 
-## Integrantes
-- Solange Quintanilla (API, despliegue)
-- Rodrigo Andrés Gómez López (Modelado, EDA)
-- Héctor Alfaro (Pipeline, testing)
-- Francisco Fernandez (Documentación, GitHub)
+Proyecto de **CLOUD COMPUTING PARA CIENCIA DE DATOS** para entrenar y desplegar un modelo de clasificación binaria (riesgo de **Default**) con **FastAPI**. Permite:
+- Entrenar desde **consola** y desde **Swagger**.
+- Hacer **predicciones** desde consola (interactivo, JSON/CSV) y desde Swagger.
+- Ver **gráficas** (ROC, PR, matriz de confusión, coeficientes) y abrir automáticamente la carpeta `artifacts/`.
+- Aplicar **reglas de negocio** y calcular automáticamente `Ratio_Ingresos_Deudas`.
+
+> Repositorio pensado para Windows/PowerShell (probado en la práctica). También funciona en macOS/Linux (ajustando activación del venv).
+
+---
+---
+
+##  Objetivos clave
+- **Consola**: entrenamiento y predicción con mensajes paso a paso y validaciones.
+- **Web (Swagger)**: entrenamiento y predicción con payloads JSON; impresión del resultado también en la **terminal** (logs Uvicorn).
+- **Trazabilidad**: artefactos, métricas, orden de features y gráficas se guardan en `artifacts/` y `outputs/`.
 
 ---
 
-## Resumen del proyecto
-Se entrenó un pipeline (preprocesamiento + regresión logística) para predecir el riesgo de **Default** usando el dataset `Tabla_data_set.xlsx`. El pipeline se serializa en `artifacts/model.joblib`.
+## Paso a paso probado (comandos reales)
+
+> Las líneas que empiezan con `#` son comentarios. Copia/pega los **comandos** tal como están.
+
+### 0) Descarga y descompresión del proyecto
+```
+# Descarga el paquete listo: modelo.zip
+# Descomprímelo, por ejemplo en: D:\MODELO_CLOUD\MODELO
+# Dentro viene la carpeta data/ (con plantilla CSV/Excel) y la estructura completa.
+```
+
+### 1) Limpiar intentos anteriores (opcional pero recomendado)
+```powershell
+cd D:\MODELO_CLOUD\MODELO\backend
+
+# si tenemos un venv previo activo, lo desactivamos (ignora si no aplica)
+deactivate 2>$null
+
+# borramos venv anterior si existe
+Remove-Item -Recurse -Force .\modelo_cloud -ErrorAction SilentlyContinue
+
+# limpia cachés de Python
+Get-ChildItem -Recurse -Directory -Filter "__pycache__" | Remove-Item -Recurse -Force
+Remove-Item -Recurse -Force .\.pytest_cache, .\.mypy_cache, .\.ruff_cache -ErrorAction SilentlyContinue
+```
+
+### 2) Crear entorno con **Python 3.12 x64** (evita fallos de pandas)
+```powershell
+# (opcional) permite scripts de venv durante esta sesión
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+
+# crear entorno con 3.12 x64
+py -3.12-64 -m venv modelo_cloud
+
+# activar
+.\modelo_cloud\Scripts\Activate.ps1
+
+# mostrar versión (debe decir 3.12.x)
+python -V
+```
+
+### 3) Instalar dependencias
+```powershell
+python -m pip install --upgrade pip setuptools wheel
+pip install -r .\requirements.txt
+```
+
+### 4) Verificar que el Excel esté en `data/`
+```powershell
+Get-Item .\data\Tabla_data_set.xlsx
+```
+
+### 5) Entrenar el modelo **desde consola** (con mensajes paso a paso e imágenes)
+```powershell
+python .\src\train.py --data .\data\Tabla_data_set.xlsx --sheet 0 --target Default --threshold 0.4 --interactive
+```
+- Mensajes: “1/9 Cargando dataset…”, “2/9 Limpiando datos…”, “Controlando outliers…”, “Entrenando…”, “Generando imágenes…”, etc.
+- Archivos generados:
+  - `outputs/train_clean.csv` (DF entrenamiento con target)
+  - `outputs/valid_clean.csv` (DF validación con target)
+  - `outputs/predicciones_validacion.csv` (auditoría: y_true, proba, yhat)
+  - `artifacts/model.joblib`, `feature_order.json`, `metrics.json`
+  - `artifacts/cm.png`, `roc.png`, `pr.png`, `importances.png`  
+- El script **abre automáticamente** las imágenes y la carpeta `artifacts/`.
+
+### 6) Predecir **desde consola de VS Code**
+```powershell
+# Interactivo (te pide cada variable)
+python .\src\predict.py --interactive
+
+# Alternativa usando el wrapper (siempre que main.py use sys.executable)
+python .\src\main.py predict --interactive
+```
+- Pedirá: `Edad`, `Nivel_Educacional (SupInc, SupCom, Posg, Bas, Med)`, `Anios_Trabajando`, `Ingresos`, `Deuda_Comercial`, `Deuda_Credito`, `Otras_Deudas`.
+- El **ratio** se calcula automáticamente y se muestra en pantalla.
+- Imprime probabilidad, decisión (umbral entrenado) y una sugerencia.
+
+### 7) Probar **Swagger** (API FastAPI)
+```powershell
+uvicorn api.v1.routes.modelo:app --reload
+# Abre automáticamente /docs. Si no, navega a:
+# http://127.0.0.1:8000/docs
+```
+
+**Payload para train** (`POST /api/v1/train`):
+```json
+{
+  "data_path": ".\\data\\Tabla_data_set.xlsx",
+  "target": "Default",
+  "threshold": 0.4,
+  "test_size": 0.2,
+  "sheet": 0
+}
+```
+**Payload para predict** (`POST /api/v1/predict`): *(el ratio lo calcula el backend)*
+```json
+{
+  "items": [
+    {
+      "Edad": 40,
+      "Nivel_Educacional": "SupCom",
+      "Anios_Trabajando": 8,
+      "Ingresos": 2500,
+      "Deuda_Comercial": 300,
+      "Deuda_Credito": 400,
+      "Otras_Deudas": 50
+    }
+  ]
+}
+```
+
+> La API también imprime el resultado en la **terminal** de Uvicorn con un bloque de texto similar al de la consola interactiva (sin crear CSV).
 
 ---
 
-## Estructura del repositorio
+## Estructura de directorios (resumen)
 ```
 backend/
 ├─ api/
+│  └─ v1/
+│     ├─ routes/
+│     │  └─ modelo.py              # Endpoints FastAPI (help/train/metrics/predict, logs en terminal)
+│     ├─ schemas/
+│     │  └─ io.py                  # Pydantic: TrainRequest / PredictRequest
+│     └─ services/
+│        └─ model_service.py       # Lanza src/train.py con el Python del venv
+│
 ├─ src/
-├─ artifacts/
-├─ requirements.txt
+│  ├─ train.py                     # Entrenamiento (mensajes 1/9…9/9, guarda y muestra imágenes)
+│  ├─ predict.py                   # Predicción (interactivo/JSON/CSV; valida reglas y calcula ratio)
+│  └─ main.py                      # Wrapper: usa sys.executable para invocar train/predict
+│
+├─ artifacts/                      # Se crea al entrenar
+│  ├─ model.joblib                 # Pipeline serializado (pre + modelo)
+│  ├─ feature_order.json           # Orden de columnas esperado por el modelo
+│  ├─ metrics.json                 # Métricas, umbral, rutas a imágenes/outputs
+│  ├─ cm.png, roc.png, pr.png      # Matriz de confusión, curva ROC, Precision-Recall
+│  └─ importances.png              # Importancias/coeficientes (si aplica)
+│
+├─ outputs/                        # Se crea al entrenar
+│  ├─ train_clean.csv              # DF de entrenamiento con target
+│  ├─ valid_clean.csv              # DF de validación con target
+│  └─ predicciones_validacion.csv  # Auditoría de validación (y_true, proba, yhat)
+│
+├─ data/
+│  ├─ Tabla_data_set.xlsx          # Dataset base (hoja 0 por defecto)
+│  └─ plantilla_prediccion.csv     # (Opcional) Ejemplo para predicción por CSV
+│
+├─ tools/
+│  ├─ run_train_api.ps1            # Crea/activa venv, instala, entrena y abre Swagger
+│  └─ predict_json.ps1             # Helper PowerShell para pasar JSON a predict.py
+│
+├─ requirements.txt                # Dependencias (Python 3.12 recomendado)
 └─ README.md
 ```
 
 ---
 
-## Requisitos
-- Python 3.12 (recomendado)
+## Reglas de negocio (validadas en consola y API)
+- `Edad >= 18` (menor de edad no accede a crédito).
+- `Anios_Trabajando <= Edad` y **no puede ser igual** a `Edad`.
+- **Límite real de experiencia**: `Anios_Trabajando <= (Edad - 18)` (años posibles desde la mayoría de edad).
+- `Ratio_Ingresos_Deudas = Ingresos / (Deuda_Comercial + Deuda_Credito + Otras_Deudas)` (limitado a [0, 5]).
 
-Crear y activar entorno virtual:
-```
-python -m venv modelo_cloud
-# PowerShell
-.\\modelo_cloud\\Scripts\\Activate.ps1
-# CMD
-.\\modelo_cloud\\Scripts\\activate.bat
-```
-Instalar dependencias:
-```
-pip install -r requirements.txt
-```
+Si los datos no cumplen, la API devuelve **422** y la consola muestra un mensaje claro.
 
 ---
 
-## Ejecutar la API localmente
-1. Verifica que `artifacts/model.joblib` y `artifacts/feature_order.json` estén presentes.
-2. Desde la raíz del proyecto ejecuta:
-```
-uvicorn api.v1.routes.modelo:app --reload --port 8000
-```
-3. Abre Swagger UI:
-```
-http://127.0.0.1:8000/docs
-```
+##  Requisitos rápidos
+- **Python 3.12 x64**
+- PowerShell (Windows) o bash (macOS/Linux).
+- Instalar con `pip install -r requirements.txt` dentro del **venv**.
 
 ---
 
-## Endpoints principales
-- **POST** `/api/v1/train` — Entrena el modelo usando un archivo local (payload: `data_path`, `target`, `threshold`, `test_size`, `sheet`). Devuelve métricas y rutas a artifacts.
-- **POST** `/api/v1/predict` — Predict para una lista de items (ver esquema en `/docs`). Devuelve probabilidades, decisiones y el ratio calculado.
-- **GET** `/api/v1/health` — Estado simple de la API.
+##  Solución de problemas (FAQ)
+- **FileNotFoundError** al entrenar → Ruta/hoja incorrecta en `data_path` o `sheet`.
+
+- **SyntaxWarning: invalid escape sequence** → usa strings crudas `r"..."` o `/` en rutas.
+
+- **422 Unprocessable Entity (Swagger)**  
+→ El payload no cumple el esquema (p.ej., faltaba `Edad` o valores fuera de regla). Corrige según la sección *Reglas de negocio*.
+
+- **ValueError: Input X contains NaN (scikit-learn)**  
+→ No envíes `NaN`. La consola y la API imputan/validan; revisa tu CSV/JSON.
+
+- **JSONDecodeError en PowerShell** → usa here-string o `--json (Get-Content ... -Raw)`.
+
+- **ModuleNotFoundError** → activa venv y reinstala `requirements.txt`.
 
 ---
-
-## Detalles del modelo y métricas
-
-Se incluyen las métricas guardadas en `artifacts/metrics.json`:
-
-```json
-{
-  "threshold": 0.5,
-  "roc_auc": 0.8455980861244019,
-  "average_precision": 0.9076426648246901,
-  "classification_report": {
-    "0": {
-      "precision": 0.7411764705882353,
-      "recall": 0.5727272727272728,
-      "f1-score": 0.6461538461538462,
-      "support": 110.0
-    },
-    "1": {
-      "precision": 0.7813953488372093,
-      "recall": 0.8842105263157894,
-      "f1-score": 0.8296296296296296,
-      "support": 190.0
-    },
-    "accuracy": 0.77,
-    "macro avg": {
-      "precision": 0.7612859097127223,
-      "recall": 0.7284688995215312,
-      "f1-score": 0.7378917378917379,
-      "support": 300.0
-    },
-    "weighted avg": {
-      "precision": 0.7666484268125855,
-      "recall": 0.77,
-      "f1-score": 0.7623551756885091,
-      "support": 300.0
-    }
-  },
-  "test_size": 0.2,
-  "paths": {
-    "model": "artifacts/model.joblib",
-    "confusion_matrix": "artifacts/cm.png",
-    "roc": "artifacts/roc.png",
-    "pr": "artifacts/pr.png",
-    "importances": "artifacts/importances.png",
-    "train_clean": "outputs/train_clean.csv",
-    "valid_clean": "outputs/valid_clean.csv",
-    "preds_validacion": "outputs/predicciones_validacion.csv"
-  }
-}
-```
-
-**Orden de features esperado por la API** (desde `artifacts/feature_order.json`):
-
-```
-Edad, Nivel_Educacional, Anios_Trabajando, Ingresos, Deuda_Comercial, Deuda_Credito, Otras_Deudas, Ratio_Ingresos_Deudas
-```
-
-> Nota: La API reindexa las columnas de entrada según `feature_order.json`.
-
 ---
 
-## Reproducir entrenamiento (opcional)
-Para regenerar artifacts desde el dataset:
-```
-python src/train.py --data .\\data\\Tabla_data_set.xlsx --sheet 0 --target Default --threshold 0.4 --interactive
-```
+##  Checklist de cumplimiento
+- [x] Estructura clara de directorios y explicación de cada archivo.
+- [x] Entrenamiento desde **consola** con progreso, gráficas y apertura de `artifacts/`.
+- [x] Entrenamiento desde **Swagger** (POST `/api/v1/train`).  
+- [x] Predicción desde **consola** (interactivo, JSON, CSV).
+- [x] Predicción desde **Swagger** (POST `/api/v1/predict`) e impresión en terminal.
+- [x] **Preprocesamiento** desde Excel, split **train/valid**, y guardado de DFs.
+- [x] **Reglas de negocio** y cálculo automático del **ratio**.
+- [x] Swagger accesible con redirección `"/" → "/docs"`.
+- [x] Paso a paso documentado y troubleshooting.
 
 ---
-
-## Evidencia (entrega)
-Incluyan en el repo:
-- `assets/screenshot_local.png` — captura del terminal con `uvicorn` y del navegador en `/docs`.
-- `assets/demo_video.mp4` — video corto (1–2 minutos).
-
----
-
-## Despliegue en la nube (opcional)
-Sugerencia rápida para Render.com:
-1. Conectar repo GitHub a Render.
-2. Build command: `pip install -r requirements_clean.txt`
-3. Start command: `uvicorn api.v1.routes.modelo:app --host 0.0.0.0 --port $PORT`
-
----
-
-## Notas finales
-- El pipeline se serializa completo en `artifacts/model.joblib`.
-
+##  Créditos
+Grupo 06 — Trabajo Grupal N°2  
+- Solange Quintanilla (API, despliegue)  
+- Rodrigo Andrés Gómez López (Modelado, EDA)  
+- Héctor Alfaro (Pipeline, testing)  
+- Francisco Fernandez (Documentación, GitHub)
