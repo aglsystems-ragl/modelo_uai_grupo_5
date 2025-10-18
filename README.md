@@ -238,6 +238,46 @@ Si los datos no cumplen, la API devuelve **422** y la consola muestra un mensaje
 ---
 ---
 
+---
+
+## 5. DESPLIEGUE EN LA NUBE CON RENDER
+
+El despliegue en la nube corresponde a la última etapa del proyecto, en la que el modelo predictivo y su API fueron publicados en Internet para poder ser utilizados desde cualquier dispositivo sin instalación local.
+
+Se utilizó la plataforma **Render**, un servicio *PaaS (Platform as a Service)* que automatiza el proceso de instalación, construcción y ejecución de aplicaciones web.
+
+### Funcionamiento de Render
+
+Render sigue tres fases principales:
+
+1. **Construcción (Build):** descarga el código desde GitHub y ejecuta  
+   `pip install -r requirements.txt` para instalar dependencias.
+2. **Ejecución (Deploy):** inicia el servidor FastAPI con:  
+   `uvicorn api.v1.routes.modelo:app --host 0.0.0.0 --port $PORT`
+3. **Publicación:** asigna una URL pública para acceder al servicio:  
+   [https://modelo-uai-grupo-5.onrender.com/docs](https://modelo-uai-grupo-5.onrender.com/docs)
+
+---
+
+### Archivo `render.yaml` (Configuración automática)
+
+El archivo `render.yaml` permite a Render conocer cómo construir y ejecutar la aplicación sin necesidad de configurar manualmente los comandos desde la interfaz web.  
+Su contenido (ya incluido en el proyecto) especifica:
+
+```yaml
+services:
+  - type: web
+    name: modelo-cloud
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn api.v1.routes.modelo:app --host 0.0.0.0 --port $PORT"
+    plan: free
+
+
+
+---
+---
+
 ##  Checklist de cumplimiento
 - [x] Estructura clara de directorios y explicación de cada archivo.
 - [x] Entrenamiento desde **consola** con progreso, gráficas y apertura de `artifacts/`.
