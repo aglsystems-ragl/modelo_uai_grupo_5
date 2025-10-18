@@ -259,8 +259,34 @@ Render sigue tres fases principales:
 3. **Publicación:** asigna una URL pública para acceder al servicio:  
    [https://modelo-uai-grupo-5.onrender.com/docs](https://modelo-uai-grupo-5.onrender.com)
 
+## PAYLOAD PARA ENTRENAR EN RENDER:
+```json
+{
+  "data_path": "data/Tabla_data_set.xlsx",
+  "target": "Default",
+  "threshold": 0.4,
+  "test_size": 0.2,
+  "sheet": 0
+}
+```
+---
 
-
+## JSON PARA PREDECIR EN RENDER
+```json
+{
+  "items": [
+    {
+      "Edad": 40,
+      "Nivel_Educacional": "SupCom",
+      "Anios_Trabajando": 8,
+      "Ingresos": 2500,
+      "Deuda_Comercial": 300,
+      "Deuda_Credito": 400,
+      "Otras_Deudas": 50
+    }
+  ]
+}
+```
 
 ### Archivo `render.yaml` (Configuración automática)
 
