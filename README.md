@@ -290,13 +290,15 @@ services:
 - [x] **Preprocesamiento** desde Excel, split **train/valid**, y guardado de DFs.
 - [x] **Reglas de negocio** y cálculo automático del **ratio**.
 - [x] Swagger accesible con redirección `"/" → "/docs"`.
+- [x] Despliegue en la nube con RENDER.
 - [x] Paso a paso documentado y troubleshooting.
+- [x] Documentacion del proyecto.
 
 ---
 ### CREDITOS
 Grupo 06 — Trabajo Grupal N°2  
 - Solange Quintanilla (API, despliegue)  
-- Rodrigo Andrés Gómez López (Modelado, EDA, API, despliegue)  
+- Rodrigo Andrés Gómez López (Modelado, EDA, API, despliegue en la nube)  
 - Héctor Alfaro (Pipeline, testing)  
 - Francisco Fernandez (Documentación, GitHub)
 
