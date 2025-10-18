@@ -71,7 +71,10 @@ backend/
 │  └─ predict_json.ps1             # Helper PowerShell para pasar JSON a predict.py
 │
 ├─ requirements.txt                # Dependencias (Python 3.12 recomendado)
+├─ render.yaml                     # permite a Render conocer cómo construir y ejecutar la aplicación sin necesidad de configurar manualmente los comandos desde la interfaz web
 └─ README.md
+
+
 ```
 ---
 ## ENTRENAMIENTO DEL MODELO
@@ -288,8 +291,7 @@ services:
 - [x] Paso a paso documentado y troubleshooting.
 
 ---
----
-## CRÉDITOS
+### CREDITOS
 Grupo 06 — Trabajo Grupal N°2  
 - Solange Quintanilla (API, despliegue)  
 - Rodrigo Andrés Gómez López (Modelado, EDA, API, despliegue)  
