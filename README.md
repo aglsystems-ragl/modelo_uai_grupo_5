@@ -266,7 +266,8 @@ Render sigue tres fases principales:
 El archivo `render.yaml` permite a Render conocer cómo construir y ejecutar la aplicación sin necesidad de configurar manualmente los comandos desde la interfaz web.  
 Su contenido (ya incluido en el proyecto) especifica:
 
-``yaml
+
+```yaml
 services:
   - type: web
     name: modelo-cloud
