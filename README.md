@@ -276,6 +276,7 @@ Render sigue tres fases principales:
 {
   "items": [
     {
+      "Id_Cliente": "C-001",
       "Edad": 40,
       "Nivel_Educacional": "SupCom",
       "Anios_Trabajando": 8,
@@ -286,6 +287,7 @@ Render sigue tres fases principales:
     }
   ]
 }
+
 ```
 
 ### Archivo `render.yaml` (Configuración automática)
