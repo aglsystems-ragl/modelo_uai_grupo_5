@@ -238,9 +238,7 @@ Si los datos no cumplen, la API devuelve **422** y la consola muestra un mensaje
 ---
 ---
 
----
-
-## 5. DESPLIEGUE EN LA NUBE CON RENDER
+## 8. DESPLIEGUE EN LA NUBE CON RENDER
 
 El despliegue en la nube corresponde a la última etapa del proyecto, en la que el modelo predictivo y su API fueron publicados en Internet para poder ser utilizados desde cualquier dispositivo sin instalación local.
 
@@ -290,7 +288,8 @@ services:
 - [x] Paso a paso documentado y troubleshooting.
 
 ---
-##  Créditos
+---
+## CRÉDITOS
 Grupo 06 — Trabajo Grupal N°2  
 - Solange Quintanilla (API, despliegue)  
 - Rodrigo Andrés Gómez López (Modelado, EDA, API, despliegue)  
