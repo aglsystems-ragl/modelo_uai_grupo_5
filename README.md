@@ -30,7 +30,8 @@ En síntesis, el informe presenta no solo un pipeline robusto y metodológicamen
 - **Trazabilidad**: artefactos, métricas, orden de features y gráficas se guardan en `artifacts/` y `outputs/`.
 
 ---
-
+## ENLACE VIDEO ENTRENAMEINTO Y DESPLIEGUE DEL MODELO PREDICTIVO
+https://drive.google.com/file/d/1Y_5R9vyhAIFSL68KwWoQ8vA80Hjt651y/view?usp=sharing
 ---
 
 ## Estructura de directorios (resumen)
