@@ -72,7 +72,7 @@ backend/
 │
 ├─ requirements.txt                # Dependencias (Python 3.12 recomendado)
 ├─ render.yaml                     # permite a Render conocer cómo construir y ejecutar la aplicación sin necesidad de configurar manualmente los comandos desde la interfaz web
-└─ README.md
+└─ README.md                       # Guia de entrenamiento y prediccion en consola, y guia de uso de la API
 
 
 ```
@@ -256,9 +256,8 @@ Render sigue tres fases principales:
 2. **Ejecución (Deploy):** inicia el servidor FastAPI con:  
    `uvicorn api.v1.routes.modelo:app --host 0.0.0.0 --port $PORT`
 3. **Publicación:** asigna una URL pública para acceder al servicio:  
-   [https://modelo-uai-grupo-5.onrender.com/docs](https://modelo-uai-grupo-5.onrender.com/docs)
+   [https://modelo-uai-grupo-5.onrender.com/docs](https://modelo-uai-grupo-5.onrender.com)
 
----
 
 ### Archivo `render.yaml` (Configuración automática)
 
