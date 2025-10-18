@@ -259,12 +259,14 @@ Render sigue tres fases principales:
    [https://modelo-uai-grupo-5.onrender.com/docs](https://modelo-uai-grupo-5.onrender.com)
 
 
+
+
 ### Archivo `render.yaml` (Configuración automática)
 
 El archivo `render.yaml` permite a Render conocer cómo construir y ejecutar la aplicación sin necesidad de configurar manualmente los comandos desde la interfaz web.  
 Su contenido (ya incluido en el proyecto) especifica:
 
-```yaml
+``yaml
 services:
   - type: web
     name: modelo-cloud
@@ -272,7 +274,6 @@ services:
     buildCommand: "pip install -r requirements.txt"
     startCommand: "uvicorn api.v1.routes.modelo:app --host 0.0.0.0 --port $PORT"
     plan: free
-
 
 
 ---
@@ -296,3 +297,7 @@ Grupo 06 — Trabajo Grupal N°2
 - Rodrigo Andrés Gómez López (Modelado, EDA, API, despliegue)  
 - Héctor Alfaro (Pipeline, testing)  
 - Francisco Fernandez (Documentación, GitHub)
+
+
+
+
