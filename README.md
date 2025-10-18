@@ -80,7 +80,8 @@ Archivo del modelo serializado: archivo donde se guarda el modelo entrenado para
 # - artifacts/model.joblib
 # Resumen de resultados: 
 artifacts/metrics.json 
-(contiene umbral, AUC, AP, classification report y rutas a imágenes) y las imágenes en artifacts/cm.png, artifacts/roc.png, artifacts/pr.png, artifacts/importances.png
+
+contiene umbral, AUC, AP, classification report y rutas a imágenes; y las imágenes en artifacts/cm.png, artifacts/roc.png, artifacts/pr.png, artifacts/importances.png
 
 ---
 ---
