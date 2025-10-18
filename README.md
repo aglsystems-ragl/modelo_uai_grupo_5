@@ -79,7 +79,7 @@ backend/
 Archivo del modelo serializado: archivo donde se guarda el modelo entrenado para poder cargarlo luego y predecir sin volver a entrenar.
 # - artifacts/model.joblib
 # Resumen de resultados: 
-artifacts/metrics.json 
+# artifacts/metrics.json 
 
 contiene umbral, AUC, AP, classification report y rutas a imágenes; y las imágenes en artifacts/cm.png, artifacts/roc.png, artifacts/pr.png, artifacts/importances.png
 
